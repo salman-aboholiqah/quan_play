@@ -2,11 +2,11 @@
       <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="Tsalul URL Player"
+        android:label="URL Player"
         android:resizeableActivity="false"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         >
         <activity
             android:name=".MainActivity"
@@ -40,9 +40,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-            <meta-data
-    android:name="com.google.android.gms.ads.APPLICATION_ID"
-    android:value="ca-app-pub-3639886740461008~7010679172"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

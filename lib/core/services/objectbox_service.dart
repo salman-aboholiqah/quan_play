@@ -1,5 +1,5 @@
 // services/objectbox_service.dart
-import 'package:tsalul_url_player/objectbox.g.dart'; // Generated file
+import 'package:url_player/objectbox.g.dart'; // Generated file
 
 class ObjectBoxService {
   late final Store _store;

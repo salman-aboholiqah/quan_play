@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:awesome_video_player/awesome_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:tsalul_url_player/core/utils/player_utils.dart';
-import 'package:tsalul_url_player/data/models/stream_model.dart';
+import 'package:url_player/core/utils/player_utils.dart';
+import 'package:url_player/data/models/stream_model.dart';
 
 class CustomFullControls extends StatefulWidget {
   final BetterPlayerController controller;

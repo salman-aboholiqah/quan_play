@@ -1,4 +1,9 @@
-// core/database/objectbox_database_helper.dart
+// ObjectBox implementation of the DatabaseHelper interface.
+//
+// Provides high-performance local database operations using ObjectBox.
+// This is a generic implementation that works with any ObjectBox entity type.
+//
+// Type parameter [T] must be an ObjectBox entity class.
 import 'package:objectbox/objectbox.dart';
 import 'database_helper.dart';
 
@@ -6,8 +11,15 @@ class ObjectBoxDatabaseHelper<T> implements DatabaseHelper<T> {
   final Store store;
   final Box<T> box;
 
+  /// Private constructor. Use [create] factory method instead.
   ObjectBoxDatabaseHelper._(this.store, this.box);
 
+  /// Factory method to create an ObjectBoxDatabaseHelper instance.
+  ///
+  /// [store] is the ObjectBox Store instance.
+  /// [type] is the type of entity (used for type inference).
+  ///
+  /// Returns a configured ObjectBoxDatabaseHelper ready for use.
   static Future<ObjectBoxDatabaseHelper<T>> create<T>(
     Store store,
     Type type,

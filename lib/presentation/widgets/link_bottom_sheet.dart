@@ -1,104 +1,15 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:tsalul_url_player/domain/entities/link_entity.dart';
-// import 'package:tsalul_url_player/presentation/bloc/link_bloc/link_bloc.dart';
-
-// class AddLinkBottomSheet extends StatefulWidget {
-//   const AddLinkBottomSheet({super.key});
-
-//   @override
-//   State<AddLinkBottomSheet> createState() => _AddLinkBottomSheetState();
-// }
-
-// class _AddLinkBottomSheetState extends State<AddLinkBottomSheet> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _titleController = TextEditingController();
-//   final _urlController = TextEditingController();
-
-//   @override
-//   void dispose() {
-//     _titleController.dispose();
-//     _urlController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.only(
-//         bottom: MediaQuery.of(context).viewInsets.bottom,
-//       ),
-//       child: Container(
-//         padding: const EdgeInsets.all(16),
-//         child: Form(
-//           key: _formKey,
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               TextFormField(
-//                 controller: _titleController,
-//                 decoration: const InputDecoration(
-//                   labelText: 'Title',
-//                   border: OutlineInputBorder(),
-//                 ),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return 'Please enter a title';
-//                   }
-//                   return null;
-//                 },
-//               ),
-//               const SizedBox(height: 16),
-//               TextFormField(
-//                 controller: _urlController,
-//                 decoration: const InputDecoration(
-//                   labelText: 'URL',
-//                   border: OutlineInputBorder(),
-//                 ),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return 'Please enter a URL';
-//                   }
-//                   if (!Uri.tryParse(value)!.hasAbsolutePath) {
-//                     return 'Please enter a valid URL';
-//                   }
-//                   return null;
-//                 },
-//               ),
-//               const SizedBox(height: 24),
-//               ElevatedButton(
-//                 onPressed: _saveLink,
-//                 child: const Text('Save Link'),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _saveLink() {
-//     if (_formKey.currentState!.validate()) {
-//       context.read<LinkBloc>().add(
-//         AddLink(
-//           LinkEntity(
-//             title: _titleController.text,
-//             url: _urlController.text,
-//             createdAt: DateTime.now(),
-//           ),
-//         ),
-//       );
-//       Navigator.pop(context);
-//     }
-//   }
-// }
+// Bottom sheet widget for adding or editing video links.
+//
+// Provides a form interface for users to add new links or edit existing ones.
+// Handles validation, submission, and displays success/error messages.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tsalul_url_player/core/services/service_locator.dart';
-import 'package:tsalul_url_player/core/theme/app_theme.dart';
-import 'package:tsalul_url_player/domain/entities/link_entity.dart';
-import 'package:tsalul_url_player/presentation/bloc/link_bloc/link_bloc.dart';
+import 'package:url_player/l10n/generated/app_localizations.dart';
+import 'package:url_player/core/services/service_locator.dart';
+import 'package:url_player/core/theme/app_theme.dart';
+import 'package:url_player/domain/entities/link_entity.dart';
+import 'package:url_player/presentation/bloc/link_bloc/link_bloc.dart';
 
 class LinkBottomSheet extends StatefulWidget {
   const LinkBottomSheet({super.key, this.linkEntity});
@@ -150,16 +61,38 @@ class _LinkBottomSheetState extends State<LinkBottomSheet> {
             if (state is LinkError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.message),
+                  content: Row(
+                    children: [
+                      const Icon(Icons.error_outline, color: Colors.white),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text(state.message)),
+                    ],
+                  ),
                   backgroundColor: AppTheme.redDarkPastel,
+                  duration: const Duration(seconds: 4),
+                  behavior: SnackBarBehavior.floating,
                 ),
               );
               Navigator.pop(context);
             } else if (state is LinkLoaded) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Link saved successfully!'),
+                  content: Row(
+                    children: [
+                      const Icon(Icons.check_circle, color: Colors.white),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          widget.linkEntity == null
+                              ? AppLocalizations.of(context)!.linkAdded
+                              : AppLocalizations.of(context)!.linkUpdated,
+                        ),
+                      ),
+                    ],
+                  ),
                   backgroundColor: Colors.green,
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
                 ),
               );
               Navigator.pop(context);
@@ -177,8 +110,8 @@ class _LinkBottomSheetState extends State<LinkBottomSheet> {
                   children: [
                     Text(
                       widget.linkEntity == null
-                          ? 'Add New Link'
-                          : "Update Link",
+                          ? AppLocalizations.of(context)!.addLink
+                          : AppLocalizations.of(context)!.updateLink,
                       style: AppTheme.titleStyle,
                     ),
                     IconButton(
@@ -192,10 +125,12 @@ class _LinkBottomSheetState extends State<LinkBottomSheet> {
                 // Title Field
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(hintText: 'Enter link title'),
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.enterLinkName,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a title';
+                      return AppLocalizations.of(context)!.requiredTitle;
                     }
                     return null;
                   },
@@ -205,17 +140,19 @@ class _LinkBottomSheetState extends State<LinkBottomSheet> {
                 TextFormField(
                   controller: _urlController,
                   keyboardType: TextInputType.url,
-                  decoration: InputDecoration(hintText: 'https://example.com'),
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.enterLinkUrl,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a URL';
+                      return AppLocalizations.of(context)!.requiredUrl;
                     }
                     final pattern =
                         r'^(https?:\/\/)?([\w\-]+\.)+[\w]{2,}(\/\S*)?$';
                     final regex = RegExp(pattern);
 
                     if (!regex.hasMatch(value.trim())) {
-                      return 'Please enter a valid URL';
+                      return AppLocalizations.of(context)!.validUrl;
                     }
                     return null;
                   },
@@ -224,7 +161,9 @@ class _LinkBottomSheetState extends State<LinkBottomSheet> {
 
                 _buildButton(
                   label:
-                      widget.linkEntity == null ? "Save Link" : "Update Link",
+                      widget.linkEntity == null
+                          ? AppLocalizations.of(context)!.saveLink
+                          : AppLocalizations.of(context)!.updateLink,
                   icon: Icons.save,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -261,7 +200,7 @@ class _LinkBottomSheetState extends State<LinkBottomSheet> {
                         Navigator.pop(context);
                         context.read<LinkBloc>().add(LoadLinks());
                       },
-                      label: "Delete Link",
+                      label: AppLocalizations.of(context)!.deleteLink,
                       icon: Icons.delete,
                       backgroundColor: AppTheme.redDarkPastel,
                     )

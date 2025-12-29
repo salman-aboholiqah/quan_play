@@ -1,0 +1,20 @@
+# Key properties template for release signing
+# Copy this file to android/app/key.properties and fill in your keystore details
+# IMPORTANT: Never commit key.properties to version control
+
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=YOUR_KEY_ALIAS
+storeFile=YOUR_KEYSTORE_PATH
+
+# Example:
+# storePassword=mySecretPassword123
+# keyPassword=mySecretPassword123
+# keyAlias=upload
+# storeFile=../keystore/upload-keystore.jks
+
+# To generate a keystore, run:
+# keytool -genkey -v -keystore android/keystore/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+#
+# Then copy this template to android/app/key.properties and fill in the values
+

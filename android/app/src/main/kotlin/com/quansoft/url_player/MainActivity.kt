@@ -1,4 +1,4 @@
-package com.quansoft.tsalul_url_player
+package com.quansoft.url_player
 
 
 import android.content.Intent

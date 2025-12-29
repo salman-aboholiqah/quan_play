@@ -1,13 +1,14 @@
 // data/datasources/link_local_datasource.dart
 
-import 'package:tsalul_url_player/core/database/database_helper.dart';
-import 'package:tsalul_url_player/core/error/exceptions.dart';
-import 'package:tsalul_url_player/data/models/link_model.dart';
+import 'package:url_player/core/database/database_helper.dart';
+import 'package:url_player/core/error/exceptions.dart';
+import 'package:url_player/data/models/link_model.dart';
 
 class LinkLocalDataSource {
   final DatabaseHelper<LinkModel> db;
   LinkLocalDataSource(this.db);
 
+  /// Guards database operations and provides meaningful error messages.
   Future<T> _guard<T>(Future<T> Function() operation, String message) async {
     try {
       return await operation();

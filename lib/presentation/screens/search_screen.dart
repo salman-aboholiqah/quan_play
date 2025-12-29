@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tsalul_url_player/domain/entities/link_entity.dart';
-import 'package:tsalul_url_player/presentation/bloc/link_bloc/link_bloc.dart';
-import 'package:tsalul_url_player/presentation/widgets/link_card.dart';
-import 'package:tsalul_url_player/presentation/widgets/search_bar_widget.dart';
+import 'package:url_player/domain/entities/link_entity.dart';
+import 'package:url_player/presentation/bloc/link_bloc/link_bloc.dart';
+import 'package:url_player/presentation/widgets/link_card.dart';
+import 'package:url_player/presentation/widgets/search_bar_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -54,11 +54,56 @@ class _SearchPageState extends State<SearchPage> {
                   if (state is LinkLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is LinkError) {
-                    return Center(child: Text(state.message));
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              size: 48,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              state.message,
+                              style: Theme.of(context).textTheme.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   } else if (state is SearchLinkLoaded) {
                     final List<LinkEntity> links = state.links;
                     if (links.isEmpty) {
-                      return const Center(child: Text("No Links found"));
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 64,
+                              color: Colors.grey[400],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No links found',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Try a different search term',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     }
 
                     return ListView.separated(

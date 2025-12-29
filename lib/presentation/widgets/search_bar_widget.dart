@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:url_player/l10n/generated/app_localizations.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final ValueChanged<String>? onSearchChanged;
@@ -30,7 +31,7 @@ class SearchBarWidget extends StatelessWidget {
             textAlign: TextAlign.right,
             decoration: InputDecoration(
               filled: true,
-              hintText: 'Search links...',
+              hintText: AppLocalizations.of(context)!.searchHint,
               prefixIcon: Icon(
                 Icons.search,
                 color:

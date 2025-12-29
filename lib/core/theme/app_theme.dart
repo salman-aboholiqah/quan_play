@@ -1,40 +1,7 @@
-// import 'package:flutter/material.dart';
-
-// class AppTheme {
-//   AppTheme._();
-
-//   static const Color boldColorFont = Color(0xFF2A2E49);
-//   static const Color normalColorFont = Color(0xFFa2a1ae);
-
-//   static const Color scaffoldColor = Color(0xFFF5F6FA);
-//   static const Color whiteColor = Color.fromARGB(255, 246, 246, 250);
-
-//   static const Color redDarkPastel = Color(0xFFC23A22);
-
-//   static const TextStyle headline1 = TextStyle(
-//     fontSize: 30,
-//     color: whiteColor,
-//     fontWeight: FontWeight.w700,
-//     fontFamily: "PoppinsBold",
-//   );
-
-//   static const TextStyle headline2 = TextStyle(
-//     fontSize: 20,
-//     color: boldColorFont,
-//     fontWeight: FontWeight.w700,
-//   );
-
-//   static const TextStyle text1 = TextStyle(
-//     fontSize: 18,
-//     color: normalColorFont,
-//     fontWeight: FontWeight.w500,
-//   );
-//   static const TextStyle text2 = TextStyle(
-//     fontSize: 16,
-//     color: normalColorFont,
-//     fontWeight: FontWeight.w500,
-//   );
-// }
+// Application theme configuration.
+//
+// Defines light and dark themes, color schemes, text styles, and gradients
+// used throughout the application.
 
 import 'package:flutter/material.dart';
 
@@ -127,6 +94,7 @@ class AppTheme {
   static TextStyle get subtitleStyle =>
       const TextStyle(fontSize: 14, color: Colors.grey);
 
+  /// Subtitle text style that adapts to theme brightness.
   static TextStyle darkSubtitleStyle(BuildContext context) => TextStyle(
     fontSize: 14,
     color:
@@ -134,11 +102,8 @@ class AppTheme {
             ? Colors.grey[400]
             : Colors.grey,
   );
-  //  static const TextStyle text1 = TextStyle(
-  //     fontSize: 18,
-  //     color: normalColorFont,
-  //     fontWeight: FontWeight.w500,
-  //   );
+
+  // Color constants
   static const Color redDarkPastel = Color(0xFFC23A22);
 
   static const Color yellow = Color(0xFFFFE324);

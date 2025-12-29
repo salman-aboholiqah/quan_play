@@ -1,14 +1,14 @@
 // Application-level settings for the Runner target.
 //
 // This may be replaced with something auto-generated from metadata (e.g., pubspec.yaml) in the
-// future. If not, the values below would default to using the project name when this becomes a
-// 'flutter create' template.
+// future. If not, the values below would default to using the project(url_player LANGUAGES CXX)
 
-// The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = tsalul_url_player
+# The name of the executable created for the application. Change this to change
+# the on-disk name of your application.
+set(BINARY_NAME "url_player")
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.quansoft.tsalulUrlPlayer
+PRODUCT_BUNDLE_IDENTIFIER = com.quansoft.url_player
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2025 com.quansoft. All rights reserved.

@@ -1,13 +1,22 @@
+// Screen for playing video streams.
+//
+// Displays a video player with support for multiple stream qualities,
+// DRM content, and custom playback controls. Automatically sets landscape
+// orientation for better viewing experience.
+
 import 'package:awesome_video_player/awesome_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:tsalul_url_player/core/utils/player_utils.dart';
-import 'package:tsalul_url_player/data/models/stream_model.dart';
-import 'package:tsalul_url_player/presentation/widgets/custom_full_controls.dart';
+import 'package:url_player/core/utils/player_utils.dart';
+import 'package:url_player/data/models/stream_model.dart';
+import 'package:url_player/presentation/widgets/custom_full_controls.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
+  /// List of available stream qualities.
   final List<StreamQuality> streams;
+
+  /// Whether to start in fullscreen mode.
   final bool fullScreenByDefault;
 
   const VideoPlayerScreen({
@@ -41,10 +50,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     initPlayer();
   }
 
-  initPlayer() {
+  /// Initializes the video player with the first available stream quality.
+  /// Configures DRM, buffering, and custom controls.
+  void initPlayer() {
     streamList = widget.streams;
-    if (streamList.isNotEmpty) {
-      current = streamList.first;
+    if (streamList.isEmpty) {
+      debugPrint('No streams available for playback');
+      return;
     }
     current = streamList.first;
     BetterPlayerControlsConfiguration controlsConfiguration =

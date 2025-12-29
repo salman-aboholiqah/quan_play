@@ -5,10 +5,20 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+import java.util.Properties
+import java.io.File
+
+// Load keystore properties from key.properties file
+val keystorePropertiesFile = rootProject.file("app/key.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+}
+
 android {
-    namespace = "com.quansoft.tsalul_url_player"
+    namespace = "com.quansoft.url_player"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -20,25 +30,72 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.quansoft.tsalul_url_player"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        applicationId = "com.quansoft.url_player"
         minSdk = 23
-        targetSdk = flutter.targetSdkVersion
+        // Explicitly set targetSdk to 34 (Android 14) to meet Google Play requirements
+        // Flutter 3.29.0 defaults should be sufficient, but explicit is better
+        targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            if (keystorePropertiesFile.exists()) {
+                val storeFileProperty = keystoreProperties["storeFile"] as String?
+                if (storeFileProperty != null) {
+                    // Resolve path relative to android directory (rootProject.projectDir)
+                    val normalizedPath = storeFileProperty.replace("../", "")
+                    val keystoreFile = File(rootProject.projectDir, normalizedPath)
+                    if (keystoreFile.exists()) {
+                        val keyAliasProperty = keystoreProperties["keyAlias"] as String?
+                        val keyPasswordProperty = keystoreProperties["keyPassword"] as String?
+                        val storePasswordProperty = keystoreProperties["storePassword"] as String?
+                        
+                        if (keyAliasProperty != null && keyPasswordProperty != null && storePasswordProperty != null) {
+                            keyAlias = keyAliasProperty
+                            keyPassword = keyPasswordProperty
+                            storeFile = keystoreFile
+                            storePassword = storePasswordProperty
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Use release signing config if properly configured, otherwise fall back to debug for development
+            val releaseSigningConfig = signingConfigs.findByName("release")
+            val storeFile = releaseSigningConfig?.storeFile
+            signingConfig = if (releaseSigningConfig != null && 
+                               storeFile != null && 
+                               storeFile.exists() &&
+                               releaseSigningConfig.keyAlias != null) {
+                releaseSigningConfig
+            } else {
+                signingConfigs.getByName("debug")
+            }
+            
+            // Enable code shrinking, obfuscation, and optimization
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Google Play Core library for Flutter deferred components support
+    // This is required to avoid R8 missing class errors
+    implementation("com.google.android.play:core:1.10.3")
+    implementation("com.google.android.play:core-ktx:1.8.1")
 }

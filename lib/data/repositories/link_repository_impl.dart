@@ -18,7 +18,7 @@ class LinkRepositoryImpl implements LinkRepository {
       await localDataSource.insertLink(LinkModel.fromEntity(link));
       return const Right(null);
     } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      return Left(CacheFailure.userFriendly(e.message));
     }
   }
 
@@ -28,7 +28,7 @@ class LinkRepositoryImpl implements LinkRepository {
       final models = await localDataSource.getAllLinks();
       return Right(models.map((m) => m.toEntity()).toList());
     } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      return Left(CacheFailure.userFriendly(e.message));
     }
   }
 
@@ -38,7 +38,7 @@ class LinkRepositoryImpl implements LinkRepository {
       final model = await localDataSource.getLinkById(id);
       return Right(model?.toEntity());
     } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      return Left(CacheFailure.userFriendly(e.message));
     }
   }
 
@@ -48,7 +48,7 @@ class LinkRepositoryImpl implements LinkRepository {
       await localDataSource.updateLink(LinkModel.fromEntity(link));
       return const Right(null);
     } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      return Left(CacheFailure.userFriendly(e.message));
     }
   }
 
@@ -58,7 +58,7 @@ class LinkRepositoryImpl implements LinkRepository {
       await localDataSource.deleteLink(id);
       return const Right(null);
     } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      return Left(CacheFailure.userFriendly(e.message));
     }
   }
 
@@ -68,7 +68,7 @@ class LinkRepositoryImpl implements LinkRepository {
       final results = await localDataSource.searchLinks(query);
       return Right(results.map((m) => m.toEntity()).toList());
     } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      return Left(CacheFailure.userFriendly(e.message));
     }
   }
 }
